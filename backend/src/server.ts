@@ -5,11 +5,13 @@ import protectedRoutes from "./routes/protected.routes";
 import app from "./app";
 import connectDB from "./config/db";
 import requiredConfig from "./config/requiredConfig";
+import billingRoute from "./routes/billing.route";
 
 // Routes
 app.use("/api/health", healthRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes)
+app.use("/api/billing", billingRoute);
 
 const PORT = requiredConfig.PORT;
 
