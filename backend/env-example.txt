@@ -1,0 +1,8 @@
+NODE_ENV=
+PORT=
+
+# Database configuration
+MONGO_URI=mongo_db_url
+
+# JWT configuration
+JWT_SECRET=jwt_secret
