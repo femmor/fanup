@@ -10,7 +10,7 @@ import connectDB from "./config/db";
 import requiredConfig from "./config/requiredConfig";
 import billingRoute from "./routes/billing.route";
 
-// Webhook route must come before express.json() middleware to recieve raw body
+// Webhook route must come before express.json() middleware to receive raw body
 app.use("/api/webhooks", webhookRoutes);
 
 // Middleware to parse JSON bodies
