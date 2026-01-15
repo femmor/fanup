@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
-    "seed:plans": "ts-node scripts/seed-plans.ts"
+    "seed:plans": "ts-node scripts/seed-plans.ts",
+    "check:subscriptions": "node check-subscriptions.js",
+    "sync:stripe": "node sync-stripe-subscriptions.js",
+    "debug:webhook": "node debug-webhook.js"
   },
   "keywords": [],
   "author": "",
