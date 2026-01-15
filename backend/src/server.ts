@@ -1,15 +1,26 @@
+import express from "express";
+
 import healthRoute from "./routes/health.route";
-import authRoutes from "./routes/auth.routes";
-import protectedRoutes from "./routes/protected.routes";
+import authRoute from "./routes/auth.route";
+import protectedRoute from "./routes/protected.route";
+import webhookRoutes from "./routes/webhook.route";
 
 import app from "./app";
 import connectDB from "./config/db";
 import requiredConfig from "./config/requiredConfig";
+import billingRoute from "./routes/billing.route";
+
+// Webhook route must come before express.json() middleware to receive raw body
+app.use("/api/webhooks", webhookRoutes);
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 // Routes
 app.use("/api/health", healthRoute);
-app.use("/api/auth", authRoutes);
-app.use("/api/protected", protectedRoutes)
+app.use("/api/auth", authRoute);
+app.use("/api/protected", protectedRoute)
+app.use("/api/billing", billingRoute);
 
 const PORT = requiredConfig.PORT;
 

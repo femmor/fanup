@@ -4,6 +4,7 @@ export interface IUser extends Document {
   email: string;
   passwordHash: string;
   role: "admin" | "fan";
+  stripeCustomerId?: string;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -20,6 +21,11 @@ const UserSchema = new Schema<IUser>({
         type: String, 
         enum: ["admin", "fan"], 
         default: "fan"
+    },
+    stripeCustomerId: {
+        type: String,
+        sparse: true,
+        unique: true
     }
 }, {
     timestamps: true
