@@ -7,7 +7,8 @@ import { AuthRequest } from "../middleware/requireAuth";
 export const createCheckoutSession = async (req: AuthRequest, res: Response) => {
     const { planId } = req.body;
 
-    const plan = await Plan.findById(planId);
+    // Find plan by Stripe price ID instead of MongoDB _id
+    const plan = await Plan.findOne({ stripePriceId: planId });
 
     if (!plan) {
         return res.status(404).json({ message: "Plan not found" });
@@ -22,14 +23,31 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response) => 
                 quantity: 1
             }
         ],
-        customer_email: req.user.email,
+        customer_email: req.user?.email,
         success_url: `${process.env.FRONTEND_URL}/dashboard?success=true`,
         cancel_url: `${process.env.FRONTEND_URL}/pricing`,
         metadata: {
-            userId: req.user._id.toString(),
+            userId: req.user?._id.toString(),
             planId: plan._id.toString()
         }
     });
 
-    res.json({ sessionId: session.id });
+    res.json({ 
+        sessionId: session.id,
+        url: session.url 
+    });
+}
+
+export const getUserSubscriptions = async (req: AuthRequest, res: Response) => {
+    try {
+        const subscriptions = await Subscription.find({ userId: req.user?._id })
+            .populate('planId')
+            .exec();
+        
+        console.log(`Found ${subscriptions.length} subscriptions for user ${req.user?._id}`);
+        res.json(subscriptions);
+    } catch (error) {
+        console.error("Error fetching user subscriptions:", error);
+        res.status(500).json({ message: "Failed to fetch subscriptions" });
+    }
 }
